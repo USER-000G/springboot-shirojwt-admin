@@ -24,17 +24,17 @@ import java.security.Security;
  **/
 @Component
 @Slf4j
-//@PropertySource("classpath:config.properties")
+@PropertySource("classpath:config.properties")
 public class AesCipherUtil {
     /**
      * AES密码加密私钥(Base64加密)
      */
     private static String encryptAESKey = Constant.encryptAESKey;
 
-//    @Value("${encryptAESKey}")
-//    public void setEncryptAESKey(String encryptAESKey) {
-//        AesCipherUtil.encryptAESKey = encryptAESKey;
-//    }
+    @Value("${encryptAESKey}")
+    public void setEncryptAESKey(String encryptAESKey) {
+        AesCipherUtil.encryptAESKey = encryptAESKey;
+    }
 
     /**
      * 加密

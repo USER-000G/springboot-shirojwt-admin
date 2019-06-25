@@ -29,29 +29,28 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 @EnableCaching
 @Slf4j
-//@PropertySource("classpath:redis.properties")
+@PropertySource("classpath:redis.properties")
 public class RedisConfiguration extends CachingConfigurerSupport {
 
-    // @Value 注入配置文件失败
-//    @Value("${spring.redis.host}")
+    @Value("${spring.redis.host}")
     private String host = "127.0.0.1";
 
-//    @Value("${spring.redis.port}")
+    @Value("${spring.redis.port}")
     private int port = 6379;
 
-//    @Value("${spring.redis.timeout}")
+    @Value("${spring.redis.timeout}")
     private int timeout = 10000;
 
-//    @Value("${spring.redis.pool.max-idle}")
+    @Value("${spring.redis.pool.max-idle}")
     private int maxIdle = 8;
 
-//    @Value("${spring.redis.pool.max-wait}")
+    @Value("${spring.redis.pool.max-wait}")
     private long maxWaitMillis = -1;
 
-//    @Value("${spring.redis.password}")
+    @Value("${spring.redis.password}")
     private String password = null;
 
-//    @Value("${spring.redis.block-when-exhausted}")
+    @Value("${spring.redis.block-when-exhausted}")
     private Boolean blockWhenExhausted = true;
 
     @Bean
