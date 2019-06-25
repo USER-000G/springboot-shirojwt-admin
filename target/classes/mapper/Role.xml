@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.have.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.have.dao.Role">
+        <id column="r_id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="role_name" />
+    </resultMap>
+
+    <select id="findRoleByUser" resultMap="BaseResultMap" parameterType="com.have.dao.User">
+      select
+        r.id r_id,
+        r.name
+      from user u
+      left join user_role ur on u.id = ur.user_id
+      left join role r on r.id = ur.role_id
+      <where>
+          <if test="username != null and username != ''">
+            and u.username = #{username}
+          </if>
+          <if test="id != null">
+              and u.id = #{id}
+          </if>
+      </where>
+    </select>
+
+</mapper>

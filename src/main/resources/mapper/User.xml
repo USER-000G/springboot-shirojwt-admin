@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.have.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.have.dao.UserDto">
+        <id column="id" javaType="java.lang.Long" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="reg_time" jdbcType="VARCHAR" property="reg_time" />
+        <collection property="roles" ofType="com.have.dao.Role" resultMap="com.have.mapper.RoleMapper.BaseResultMap" ></collection>
+        <collection property="permissions" ofType="com.have.dao.Permission" resultMap="com.have.mapper.PermissionMapper.BaseResultMap" ></collection>
+    </resultMap>
+
+    <select id="findUserInfo" resultMap="BaseResultMap" parameterType="com.have.dao.User">
+      SELECT
+        u.*,
+        r.id r_id,
+        r.name,
+        p.id p_id,
+        p.name,
+        p.per_code
+        from user u
+        left join user_role ur on u.id = ur.user_id
+        left join role r on ur.role_id = r.id
+        left join role_permission rp on r.id = rp.role_id
+        left join permission p on rp.permission_id = p.id
+      <where>
+        <if test="username != null and username != ''">
+            AND u.username = #{username}
+        </if>
+        <if test="id != null">
+            AND u.id = #{id}
+        </if>
+      </where>
+    </select>
+
+    <insert id="addUser" parameterType="com.have.dao.User" useGeneratedKeys="true" keyProperty="id">
+      insert into user(id,username,password,nickname,reg_time) values(#{id},#{username},#{password},#{nickname},#{reg_time})
+    </insert>
+
+    <delete id="deleteUser" parameterType="com.have.dao.User">
+        delete from user
+        <where>
+            <if test="id != null">
+              AND id=#{id}
+            </if>
+            <if test="username != null and username != ''">
+              AND username=#{username}
+            </if>
+        </where>
+    </delete>
+
+    <update id="updateUser" parameterType="com.have.dao.User">
+        update user set
+        <if test="username != null and username != ''">
+            username=#{username}
+        </if>
+        <if test="password != null and password != ''">
+            password=#{password}
+        </if>
+        <if test="nickname != null and nickname != ''">
+            nickname=#{nickname}
+        </if>
+        <where>
+            <if test="id != null">
+                AND id=#{id}
+            </if>
+            <!--<if test="username != null and username != ''">-->
+                <!--AND username=#{username}-->
+            <!--</if>-->
+        </where>
+    </update>
+
+</mapper>

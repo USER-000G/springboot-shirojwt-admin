@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.have.mapper.PermissionMapper">
+    <resultMap id="BaseResultMap" type="com.have.dao.Permission">
+        <id column="p_id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="perm_name" />
+        <result column="per_code" jdbcType="VARCHAR" property="perm_code" />
+    </resultMap>
+
+    <select id="findPermissionByRole" resultMap="BaseResultMap" parameterType="com.have.dao.Role">
+      SELECT
+        p.id as p_id,
+        p.name,
+        p.per_code
+      FROM role r
+      LEFT JOIN role_permission rp ON r.id = rp.role_id
+      LEFT JOIN permission p ON p.id = rp.permission_id
+        <where>
+          <if test="role_name != null and role_name != ''">
+              AND r.name = #{role_name}
+          </if>
+        </where>
+    </select>
+    <select id="findPermissionByUser" resultMap="BaseResultMap" parameterType="com.have.dao.User">
+        select
+          p.id as p_id,
+          p.name,
+          p.per_code
+        from user u
+        left join user_role ur on u.id = ur.user_id
+        left join role_permission rp on rp.role_id = ur.role_id
+        left join permission p on p.id = rp.permission_id
+        <where>
+            <if test="id != null">
+                AND u.id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                AND u.username = #{username}
+            </if>
+        </where>
+    </select>
+
+</mapper>
